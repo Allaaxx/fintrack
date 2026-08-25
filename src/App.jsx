@@ -1,5 +1,11 @@
+import { Button } from './components/ui/button';
+
 const App = () => {
-  return <h1>Hello World</h1>;
+  return (
+    <div className="flex h-screen w-screen items-center justify-center">
+      <Button>Hello world</Button>
+    </div>
+  );
 };
 
 export default App;

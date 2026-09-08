@@ -1,4 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import z from 'zod';
@@ -21,6 +23,8 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/toast';
+import api from '@/lib/axios';
 
 const signUpSchema = z.object({
   firstName: z.string().trim().min(1, {
@@ -49,6 +53,20 @@ const signUpSchema = z.object({
 });
 
 const SignUpPage = () => {
+  const [user, setUser] = useState();
+  const signUpMutation = useMutation({
+    mutationKey: ['signup'],
+    mutationFn: async (variables) => {
+      const response = await api.post('/auth', {
+        first_name: variables.firstName,
+        last_name: variables.lastName,
+        email: variables.email,
+        password: variables.password,
+      });
+      return response.data;
+    },
+  });
+
   const form = useForm({
     resolver: zodResolver(signUpSchema),
     mode: 'onSubmit',
@@ -63,8 +81,30 @@ const SignUpPage = () => {
   });
 
   const handleSubmit = (data) => {
-    console.log(data);
+    signUpMutation.mutate(data, {
+      onSuccess: (createdUser) => {
+        const accessToken = createdUser.tokens.accessToken;
+        const refreshToken = createdUser.tokens.refreshToken;
+        setUser(createdUser);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        toast.add({
+          type: 'success',
+          description: 'Conta criada com sucesso!',
+        });
+      },
+      onError: () => {
+        toast.add({
+          type: 'error',
+          description: 'Erro ao criar conta. Por favor, tente mais tarde.',
+        });
+      },
+    });
   };
+
+  if (user) {
+    return <h1>Olá, {user.first_name}</h1>;
+  }
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center gap-3">
       <Card className="w-full max-w-lg">
@@ -232,12 +272,3 @@ const SignUpPage = () => {
 };
 
 export default SignUpPage;
-
-// <Input type="text" placeholder="Digite seu nome" />
-// <Input type="text" placeholder="Digite seu sobrenome" />
-// <Input type="email" placeholder="Digite seu email" />
-// <PasswordInput />
-// <PasswordInput placeholder="Digite sua senha novamente" />
-// <div className="flex items-start space-x-2">
-//
-// </div>

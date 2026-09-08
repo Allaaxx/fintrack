@@ -1,4 +1,7 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
+import z from 'zod';
 
 import PasswordInput from '@/components/password-input';
 import { Button } from '@/components/ui/button';
@@ -11,9 +14,57 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
+const signUpSchema = z.object({
+  firstName: z.string().trim().min(1, {
+    error: 'O nome é obrigatório.',
+  }),
+  lastName: z.string().trim().min(1, {
+    error: 'O sobrenome é obrigatório.',
+  }),
+  email: z
+    .email({
+      error: 'O e-mail é inválido.',
+    })
+    .trim()
+    .min(1, {
+      error: 'O e-mail é obrigatório.',
+    }),
+  password: z.string().trim().min(6, {
+    error: 'A senha deve ter no minímo 6 caracteres.',
+  }),
+  passwordConfirmation: z.string().trim().min(6, {
+    error: 'A confirmação de senha é obrigatória.',
+  }),
+  terms: z.boolean().refine((value) => value === true, {
+    error: 'Você precisa aceitar os termos.',
+  }),
+});
+
 const SignUpPage = () => {
+  const form = useForm({
+    resolver: zodResolver(signUpSchema),
+    mode: 'onSubmit',
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      passwordConfirmation: '',
+      terms: false,
+    },
+  });
+
+  const handleSubmit = (data) => {
+    console.log(data);
+  };
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center gap-3">
       <Card className="w-full max-w-lg">
@@ -24,28 +75,149 @@ const SignUpPage = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Input type="text" placeholder="Digite seu nome" />
-          <Input type="text" placeholder="Digite seu sobrenome" />
-          <Input type="email" placeholder="Digite seu email" />
-          <PasswordInput />
-          <PasswordInput placeholder="Digite sua senha novamente" />
-          <div className="flex items-start space-x-2">
-            <Checkbox id="terms" />
-            <div className="grid gap-1.5 leading-none">
-              <label
-                htmlFor="terms"
-                className="text-muted-foreground text-xs opacity-75"
-              >
-                Ao clicar em "Criar conta", você aceita{' '}
-                <a href="#" className="text-white underline">
-                  nosso termo de uso e política de privacidade.
-                </a>
-              </label>
-            </div>
-          </div>
+          <form id="form-sign-up" onSubmit={form.handleSubmit(handleSubmit)}>
+            <FieldGroup>
+              <Controller
+                name="firstName"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Nome</FieldLabel>
+                    <Input
+                      {...field}
+                      id="firstName"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Digite seu nome"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="lastName"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Sobrenome</FieldLabel>
+                    <Input
+                      {...field}
+                      id="lastName"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Digite seu sobrenome"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>E-mail</FieldLabel>
+                    <Input
+                      {...field}
+                      id="email"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Digite seu email"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Senha</FieldLabel>
+                    <PasswordInput
+                      {...field}
+                      id="password"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Digite sua senha"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="passwordConfirmation"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>
+                      Confirmação de senha
+                    </FieldLabel>
+                    <PasswordInput
+                      {...field}
+                      id="passwordConfirmation"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Digite sua senha novamente"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="terms"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <FieldGroup data-slot="checkbox-group">
+                    <Field
+                      orientation="horizontal"
+                      data-invalid={fieldState.invalid}
+                    >
+                      <Checkbox
+                        id="terms"
+                        name={field.name}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        onBlur={field.onBlur}
+                        ref={field.ref}
+                        aria-invalid={fieldState.invalid}
+                      />
+
+                      <div className="grid gap-1.5 leading-none">
+                        <FieldLabel
+                          htmlFor="terms"
+                          className={`text-xs opacity-75 ${!fieldState.invalid && 'text-muted-foreground'}`}
+                        >
+                          Ao clicar em "Criar conta", você aceita{' '}
+                          <a
+                            href="#"
+                            className={`underline ${!fieldState.invalid && 'text-white'}`}
+                          >
+                            nosso termo de uso e política de privacidade.
+                          </a>
+                        </FieldLabel>
+                      </div>
+                    </Field>
+                  </FieldGroup>
+                )}
+              />
+            </FieldGroup>
+          </form>
         </CardContent>
         <CardFooter>
-          <Button className="w-full">Criar conta</Button>
+          <Button className="w-full" type="submit" form="form-sign-up">
+            Criar conta
+          </Button>
         </CardFooter>
       </Card>
 
@@ -60,3 +232,12 @@ const SignUpPage = () => {
 };
 
 export default SignUpPage;
+
+// <Input type="text" placeholder="Digite seu nome" />
+// <Input type="text" placeholder="Digite seu sobrenome" />
+// <Input type="email" placeholder="Digite seu email" />
+// <PasswordInput />
+// <PasswordInput placeholder="Digite sua senha novamente" />
+// <div className="flex items-start space-x-2">
+//
+// </div>

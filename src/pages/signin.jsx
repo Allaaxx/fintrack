@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import z from 'zod';
@@ -22,21 +21,10 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { toast } from '@/components/ui/toast';
-import api from '@/lib/axios';
+import { AuthContext } from '@/contexts/auth';
 
 const SignInPage = () => {
-  const [user, setUser] = useState();
-  const signInMutation = useMutation({
-    mutationKey: 'signin',
-    mutationFn: async (variables) => {
-      const response = await api.post('/auth/login', {
-        email: variables.email,
-        password: variables.password,
-      });
-      return response.data;
-    },
-  });
+  const { user, signin } = useContext(AuthContext);
   const signInSchema = z.object({
     email: z
       .email({
@@ -58,48 +46,7 @@ const SignInPage = () => {
       password: '',
     },
   });
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const accessToken = localStorage.getItem('accessToken');
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (!accessToken && !refreshToken) return;
-        const response = await api.get('/users/me', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        setUser(response.data);
-      } catch (error) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        console.error(error);
-      }
-    };
-    init();
-  }, []);
-  const handleSubmit = (data) => {
-    signInMutation.mutate(data, {
-      onSuccess: (createdUser) => {
-        const accessToken = createdUser.tokens.accessToken;
-        const refreshToken = createdUser.tokens.refreshToken;
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-        setUser(createdUser);
-        toast.add({
-          type: 'success',
-          description: 'Logado com sucesso!',
-        });
-      },
-      onError: (error) => {
-        console.error(error);
-        toast.add({
-          type: 'error',
-          description: 'Erro ao logar. Por favor, tente mais tarde.',
-        });
-      },
-    });
-  };
+  const handleSubmit = (data) => signin(data);
   if (user) {
     return <h1>Olá, {user.first_name} VC FOI LOGADO!</h1>;
   }

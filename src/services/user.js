@@ -10,4 +10,11 @@ export const UserService = {
     });
     return response.data;
   },
+  signin: async (input) => {
+    const response = await publicApi.post('/auth/login', {
+      email: input.email,
+      password: input.password,
+    });
+    return response.data;
+  },
 };

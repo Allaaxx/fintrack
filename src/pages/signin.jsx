@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { Link } from 'react-router';
+import { Link, Navigate } from 'react-router';
 import z from 'zod';
 
 import PasswordInput from '@/components/password-input';
@@ -23,7 +23,7 @@ import { Input } from '@/components/ui/input';
 import { useAuthContext } from '@/contexts/auth';
 
 const SignInPage = () => {
-  const { user, signin } = useAuthContext();
+  const { user, signin, isInitializing } = useAuthContext();
   const signInSchema = z.object({
     email: z
       .email({
@@ -46,8 +46,11 @@ const SignInPage = () => {
     },
   });
   const handleSubmit = (data) => signin(data);
+
+  if (isInitializing) return null;
+
   if (user) {
-    return <h1>Olá, {user.first_name} VC FOI LOGADO!</h1>;
+    return <Navigate to="/" />;
   }
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center gap-3">

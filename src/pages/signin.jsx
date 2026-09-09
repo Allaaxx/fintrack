@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import z from 'zod';
@@ -21,10 +20,10 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { AuthContext } from '@/contexts/auth';
+import { useAuthContext } from '@/contexts/auth';
 
 const SignInPage = () => {
-  const { user, signin } = useContext(AuthContext);
+  const { user, signin } = useAuthContext();
   const signInSchema = z.object({
     email: z
       .email({

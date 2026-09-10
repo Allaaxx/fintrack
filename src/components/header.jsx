@@ -1,8 +1,9 @@
-import { LogOutIcon } from 'lucide-react';
+import { ChevronDownIcon, LogOutIcon } from 'lucide-react';
 
 import { LogoIcon } from '@/assets/images';
 import { useAuthContext } from '@/contexts/auth';
 
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import {
@@ -18,15 +19,25 @@ const Header = () => {
   const { user, signout } = useAuthContext();
   return (
     <Card>
-      <CardContent className="flex items-center justify-between px-8 py-4">
+      <CardContent className="flex items-center justify-between px-8 py-1">
         <div>
-          <LogoIcon className="h-8 w-auto text-white" />
+          <LogoIcon className="h-10 w-10 text-white" />
         </div>
         <div>
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Button variant="outline">
-                {user.firstName} {user.lastName}{' '}
+              <Button variant="outline" className="space-x-1 py-5">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage />
+                  <AvatarFallback>
+                    {user.firstName[0]}
+                    {user.lastName[0]}
+                  </AvatarFallback>
+                </Avatar>
+                <p className="text-sm">
+                  {user.firstName} {user.lastName}
+                </p>
+                <ChevronDownIcon />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

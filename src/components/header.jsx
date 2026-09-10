@@ -21,7 +21,7 @@ const Header = () => {
     <Card>
       <CardContent className="flex items-center justify-between px-8 py-1">
         <div>
-          <LogoIcon className="h-10 w-10 text-white" />
+          <LogoIcon className="text-primary h-10 w-10" />
         </div>
         <div>
           <DropdownMenu>

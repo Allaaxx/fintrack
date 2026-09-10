@@ -54,6 +54,7 @@ const DatePickerWithRange = ({
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="range"
+            locale={ptBR}
             defaultMonth={value?.from}
             selected={value}
             onSelect={onChange}

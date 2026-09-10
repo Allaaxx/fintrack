@@ -25,21 +25,23 @@ const Header = () => {
         </div>
         <div>
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="outline" className="space-x-1 py-5">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage />
-                  <AvatarFallback>
-                    {user.firstName[0]}
-                    {user.lastName[0]}
-                  </AvatarFallback>
-                </Avatar>
-                <p className="text-sm">
-                  {user.firstName} {user.lastName}
-                </p>
-                <ChevronDownIcon />
-              </Button>
-            </DropdownMenuTrigger>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="outline" className="space-x-1 py-5">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage />
+                    <AvatarFallback>
+                      {user.firstName[0]}
+                      {user.lastName[0]}
+                    </AvatarFallback>
+                  </Avatar>
+                  <p className="text-sm">
+                    {user.firstName} {user.lastName}
+                  </p>
+                  <ChevronDownIcon />
+                </Button>
+              }
+            ></DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuGroup>
                 <DropdownMenuLabel>Meu Perfil</DropdownMenuLabel>

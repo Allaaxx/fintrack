@@ -6,7 +6,7 @@ import {
   LOCAL_STORAGE_ACCESS_TOKEN_KEY,
   LOCAL_STORAGE_REFRESH_TOKEN_KEY,
 } from '@/constants/local-storage';
-import { UserService } from '@/services/user';
+import { AuthService } from '@/services/index';
 
 export const AuthContext = createContext({
   user: null,
@@ -34,7 +34,7 @@ export const AuthContextProvider = ({ children }) => {
   const signUpMutation = useMutation({
     mutationKey: ['signup'],
     mutationFn: async (variables) => {
-      const response = await UserService.signup(variables);
+      const response = await AuthService.signup(variables);
       return response;
     },
   });
@@ -42,7 +42,7 @@ export const AuthContextProvider = ({ children }) => {
   const signInMutation = useMutation({
     mutationKey: 'signin',
     mutationFn: async (variables) => {
-      const response = await UserService.signin(variables);
+      const response = await AuthService.signin(variables);
       return response;
     },
   });
@@ -58,7 +58,7 @@ export const AuthContextProvider = ({ children }) => {
           LOCAL_STORAGE_REFRESH_TOKEN_KEY
         );
         if (!accessToken && !refreshToken) return;
-        const response = await UserService.me();
+        const response = await AuthService.me();
         setUser(response);
       } catch (error) {
         setUser(null);

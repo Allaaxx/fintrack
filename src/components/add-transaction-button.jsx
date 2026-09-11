@@ -5,7 +5,12 @@ import {
   TrendingDownIcon,
   TrendingUpIcon,
 } from 'lucide-react';
+import { useState } from 'react';
+import { Controller } from 'react-hook-form';
+import { NumericFormat } from 'react-number-format';
 
+import { Button } from '@/components/ui/button';
+import DatePicker from '@/components/ui/date-picker';
 import {
   Dialog,
   DialogClose,
@@ -16,29 +21,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-
-const formSchema = z.object({
-  name: z.string().trim().min(1, {
-    error: 'O nome é obrigatório.',
-  }),
-  amount: z.number({
-    error: 'O valor é obrigatório.',
-  }),
-  date: z.date({
-    error: 'A data é obrigatória.',
-  }),
-  type: z.enum(['EARNING', 'EXPENSE', 'INVESTMENT']),
-});
-
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { NumericFormat } from 'react-number-format';
-import z from 'zod';
-
-import { useCreateTransaction } from '@/api/hooks/transaction';
-import { Button } from '@/components/ui/button';
-import DatePicker from '@/components/ui/date-picker';
 import {
   Field,
   FieldError,
@@ -47,34 +29,27 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/toast';
+import { useCreateTransactionForm } from '@/forms/hooks/transaction';
 
 const AddTransactionButton = () => {
-  const { mutateAsync: createTransaction, isPending } = useCreateTransaction();
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      amount: 0,
-      date: new Date(),
-      type: 'EARNING',
-    },
-    shouldUnregister: true,
-  });
-
-  const onSubmit = async (data) => {
-    try {
-      await createTransaction(data);
+  const { form, onSubmit } = useCreateTransactionForm({
+    onSuccess: () => {
       setDialogIsOpen(false);
       toast.add({
         type: 'success',
         description: 'Transação criada com sucesso.',
       });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+    },
+    onError: () => {
+      setDialogIsOpen(false);
+      toast.add({
+        type: 'error',
+        description:
+          'Ocorreu um erro ao criar a transação. Por favor, tente novamente.',
+      });
+    },
+  });
   return (
     <>
       <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
@@ -212,7 +187,7 @@ const AddTransactionButton = () => {
                 <Button
                   type="reset"
                   variant="secondary"
-                  disabled={isPending}
+                  disabled={form.formState.isSubmitting}
                   className="w-1/2"
                   onClick={() => form.reset()}
                 >
@@ -223,7 +198,7 @@ const AddTransactionButton = () => {
             <Button
               type="submit"
               form="addTransaction"
-              disabled={isPending}
+              disabled={form.formState.isSubmitting}
               className="w-1/2"
             >
               {form.formState.isSubmitting && (

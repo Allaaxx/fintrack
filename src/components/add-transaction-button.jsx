@@ -1,0 +1,212 @@
+import {
+  PiggyBankIcon,
+  PlusIcon,
+  TrendingDownIcon,
+  TrendingUpIcon,
+} from 'lucide-react';
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+
+const formSchema = z.object({
+  name: z.string().trim().min(1, {
+    error: 'O nome é obrigatório.',
+  }),
+  amount: z.number({
+    error: 'O valor é obrigatório.',
+  }),
+  date: z.date({
+    error: 'A data é obrigatória.',
+  }),
+  type: z.enum(['EARNING', 'EXPENSE', 'INVESTMENT']),
+});
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+import { NumericFormat } from 'react-number-format';
+import z from 'zod';
+
+import { Button } from './ui/button';
+import DatePicker from './ui/date-picker';
+import { Field, FieldError, FieldGroup, FieldLabel } from './ui/field';
+import { Input } from './ui/input';
+
+const AddTransactionButton = () => {
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      amount: 0,
+      date: new Date(),
+      type: 'EARNING',
+    },
+    shouldUnregister: true,
+  });
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
+  return (
+    <>
+      <Dialog>
+        <DialogTrigger
+          render={
+            <Button>
+              <PlusIcon />
+              Nova transação
+            </Button>
+          }
+        ></DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Adicionar Transação</DialogTitle>
+            <DialogDescription>Insira as informações abaixo.</DialogDescription>
+          </DialogHeader>
+          <form
+            id="addTransaction"
+            className="space-y-8"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            <FieldGroup>
+              <Controller
+                name="name"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="name">Nome</FieldLabel>
+                    <Input
+                      {...field}
+                      id="name"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Digite o nome da transação"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="amount"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="amount">Valor</FieldLabel>
+                    <NumericFormat
+                      {...field}
+                      placeholder="Digite o valor da transação"
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      id="amount"
+                      aria-invalid={fieldState.invalid}
+                      autoComplete="off"
+                      prefix="R$"
+                      allowNegative={false}
+                      customInput={Input}
+                      onChange={() => {}}
+                      onValueChange={(values) =>
+                        field.onChange(values.floatValue)
+                      }
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="date"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="date">Data</FieldLabel>
+                    <DatePicker
+                      {...field}
+                      id="date"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Selecione a data da transação"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="type"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="type">Tipo</FieldLabel>
+                    <div className="grid grid-cols-3 gap-2">
+                      <Button
+                        variant={
+                          field.value === 'EARNING' ? 'secondary' : 'outline'
+                        }
+                        onClick={() => field.onChange('EARNING')}
+                      >
+                        <TrendingUpIcon className="text-primary-green" />
+                        Ganho
+                      </Button>
+                      <Button
+                        variant={
+                          field.value === 'EXPENSE' ? 'secondary' : 'outline'
+                        }
+                        onClick={() => field.onChange('EXPENSE')}
+                      >
+                        <TrendingDownIcon className="text-primary-red" />
+                        Gasto
+                      </Button>
+                      <Button
+                        variant={
+                          field.value === 'INVESTMENT' ? 'secondary' : 'outline'
+                        }
+                        onClick={() => field.onChange('INVESTMENT')}
+                      >
+                        <PiggyBankIcon className="text-primary-blue" />
+                        Investimento
+                      </Button>
+                    </div>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </form>
+          <DialogFooter>
+            <DialogClose
+              render={
+                <Button
+                  type="reset"
+                  variant="secondary"
+                  className="w-1/2"
+                  onClick={() => form.reset()}
+                >
+                  Cancelar
+                </Button>
+              }
+            />
+            <Button type="submit" form="addTransaction" className="w-1/2">
+              Adicionar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};
+
+export default AddTransactionButton;

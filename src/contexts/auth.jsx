@@ -6,7 +6,7 @@ import {
   LOCAL_STORAGE_ACCESS_TOKEN_KEY,
   LOCAL_STORAGE_REFRESH_TOKEN_KEY,
 } from '@/constants/local-storage';
-import { AuthService } from '@/services/index';
+import { AuthService } from '@/api/services/index';
 
 export const AuthContext = createContext({
   user: null,

@@ -3,6 +3,7 @@ import { addMonths, format, isValid } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 
+import { getUserBalanceQueryKey } from '@/api/hooks/user';
 import DatePickerWithRange from '@/components/ui/date-picker-with-range';
 import { useAuthContext } from '@/contexts/auth';
 
@@ -46,12 +47,11 @@ const DateSelection = () => {
     queryParams.set('to', formatDateToQueryParam(date.to));
     navigate(`/?${queryParams.toString()}`);
     queryClient.invalidateQueries({
-      queryKey: [
-        'balance',
-        user.id,
-        formatDateToQueryParam(date.from),
-        formatDateToQueryParam(date.to),
-      ],
+      queryKey: getUserBalanceQueryKey({
+        userId: user.id,
+        from: formatDateToQueryParam(date.from),
+        to: formatDateToQueryParam(date.to),
+      }),
     });
   }, [navigate, date, queryClient, user.id]);
 

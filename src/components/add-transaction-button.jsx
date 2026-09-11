@@ -37,6 +37,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
 import z from 'zod';
 
+import { getUserBalanceQueryKey } from '@/api/hooks/user';
+import TransactionService from '@/api/services/transaction';
 import { Button } from '@/components/ui/button';
 import DatePicker from '@/components/ui/date-picker';
 import {
@@ -48,7 +50,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/toast';
 import { useAuthContext } from '@/contexts/auth';
-import TransactionService from '@/services/transaction';
 
 const AddTransactionButton = () => {
   const queryClient = useQueryClient();
@@ -58,7 +59,9 @@ const AddTransactionButton = () => {
     mutationFn: (input) => TransactionService.create(input),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['balance', user.id],
+        queryKey: getUserBalanceQueryKey({
+          userId: user.id,
+        }),
       });
     },
   });

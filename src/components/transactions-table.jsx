@@ -6,6 +6,7 @@ import { useSearchParams } from 'react-router';
 import { useGetTransactions } from '@/api/hooks/transaction';
 import { formatCurrency } from '@/helpers/currency';
 
+import DeleteTransactionButton from './delete-transaction-button';
 import EditTransactionButton from './edit-transaction-button';
 import TransactionTypeBadge from './transaction-type-badge';
 import { Button } from './ui/button';
@@ -84,7 +85,12 @@ const columns = [
     accessorKey: 'actions',
     header: 'Ações',
     cell: ({ row: { original: transaction } }) => {
-      return <EditTransactionButton transaction={transaction} />;
+      return (
+        <>
+          <EditTransactionButton transaction={transaction} />
+          <DeleteTransactionButton transaction={transaction} />
+        </>
+      );
     },
   },
 ];

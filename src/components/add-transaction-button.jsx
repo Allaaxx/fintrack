@@ -1,4 +1,5 @@
 import {
+  Loader2Icon,
   PiggyBankIcon,
   PlusIcon,
   TrendingDownIcon,
@@ -30,16 +31,38 @@ const formSchema = z.object({
 });
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
 import z from 'zod';
 
-import { Button } from './ui/button';
-import DatePicker from './ui/date-picker';
-import { Field, FieldError, FieldGroup, FieldLabel } from './ui/field';
-import { Input } from './ui/input';
+import { Button } from '@/components/ui/button';
+import DatePicker from '@/components/ui/date-picker';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/toast';
+import { useAuthContext } from '@/contexts/auth';
+import TransactionService from '@/services/transaction';
 
 const AddTransactionButton = () => {
+  const queryClient = useQueryClient();
+  const { user } = useAuthContext();
+  const { mutateAsync: createTransaction, isPending } = useMutation({
+    mutationKey: ['createTransaction'],
+    mutationFn: (input) => TransactionService.create(input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['balance', user.id],
+      });
+    },
+  });
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,13 +74,22 @@ const AddTransactionButton = () => {
     shouldUnregister: true,
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      await createTransaction(data);
+      setDialogIsOpen(false);
+      toast.add({
+        type: 'success',
+        description: 'Transação criada com sucesso.',
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <>
-      <Dialog>
+      <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
         <DialogTrigger
           render={
             <Button>
@@ -192,6 +224,7 @@ const AddTransactionButton = () => {
                 <Button
                   type="reset"
                   variant="secondary"
+                  disabled={isPending}
                   className="w-1/2"
                   onClick={() => form.reset()}
                 >
@@ -199,7 +232,15 @@ const AddTransactionButton = () => {
                 </Button>
               }
             />
-            <Button type="submit" form="addTransaction" className="w-1/2">
+            <Button
+              type="submit"
+              form="addTransaction"
+              disabled={isPending}
+              className="w-1/2"
+            >
+              {form.formState.isSubmitting && (
+                <Loader2Icon className="animate-spin" />
+              )}
               Adicionar
             </Button>
           </DialogFooter>

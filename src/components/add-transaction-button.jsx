@@ -31,14 +31,12 @@ const formSchema = z.object({
 });
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
 import z from 'zod';
 
-import { getUserBalanceQueryKey } from '@/api/hooks/user';
-import TransactionService from '@/api/services/transaction';
+import { useCreateTransaction } from '@/api/hooks/transaction';
 import { Button } from '@/components/ui/button';
 import DatePicker from '@/components/ui/date-picker';
 import {
@@ -49,22 +47,9 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/toast';
-import { useAuthContext } from '@/contexts/auth';
 
 const AddTransactionButton = () => {
-  const queryClient = useQueryClient();
-  const { user } = useAuthContext();
-  const { mutateAsync: createTransaction, isPending } = useMutation({
-    mutationKey: ['createTransaction'],
-    mutationFn: (input) => TransactionService.create(input),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: getUserBalanceQueryKey({
-          userId: user.id,
-        }),
-      });
-    },
-  });
+  const { mutateAsync: createTransaction, isPending } = useCreateTransaction();
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const form = useForm({
     resolver: zodResolver(formSchema),

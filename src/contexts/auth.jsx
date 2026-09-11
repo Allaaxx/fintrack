@@ -77,24 +77,18 @@ export const AuthContextProvider = ({ children }) => {
     });
   };
 
-  const signin = (data) => {
-    signInMutation.mutate(data, {
-      onSuccess: (loggedUser) => {
-        setTokens(loggedUser.tokens);
-        setUser(loggedUser);
-        toast.add({
-          type: 'success',
-          description: 'Logado com sucesso!',
-        });
-      },
-      onError: (error) => {
-        console.error(error);
-        toast.add({
-          type: 'error',
-          description: 'Erro ao logar. Por favor, tente mais tarde.',
-        });
-      },
-    });
+  const signin = async (data) => {
+    try {
+      const loggedUser = await signInMutation.mutateAsync(data);
+      setUser(loggedUser);
+      setTokens(loggedUser.tokens);
+      toast.add({
+        type: 'success',
+        description: 'Logado com sucesso!',
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const signout = () => {

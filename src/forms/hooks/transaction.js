@@ -2,8 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { useCreateTransaction } from '@/api/hooks/transaction';
-
-import { createTransactionFormSchema } from '../schemas/transaction';
+import { createTransactionFormSchema } from '@/forms/schemas/transaction';
 
 export const useCreateTransactionForm = ({ onSuccess, onError }) => {
   const { mutateAsync: createTransaction } = useCreateTransaction();

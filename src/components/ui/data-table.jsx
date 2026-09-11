@@ -29,10 +29,10 @@ export function DataTable({ columns, data }) {
     features,
     data,
     columns,
+    onSortingChange: setSorting,
     state: {
       sorting,
     },
-    onSortingChange: setSorting,
   });
 
   const rows = table.getRowModel().rows;

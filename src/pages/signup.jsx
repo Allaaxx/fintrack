@@ -1,3 +1,4 @@
+import { Loader2Icon } from 'lucide-react';
 import { Controller } from 'react-hook-form';
 import { Link, Navigate } from 'react-router';
 
@@ -24,8 +25,7 @@ import { useSignUpForm } from '@/forms/hooks/auth';
 
 const SignUpPage = () => {
   const { user, signup, isInitializing } = useAuthContext();
-
-  const form = useSignUpForm();
+  const { form } = useSignUpForm();
 
   const handleSubmit = (data) => signup(data);
 
@@ -184,7 +184,15 @@ const SignUpPage = () => {
           </form>
         </CardContent>
         <CardFooter>
-          <Button className="w-full" type="submit" form="form-sign-up">
+          <Button
+            className="w-full"
+            type="submit"
+            form="form-sign-up"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting && (
+              <Loader2Icon className="animate-spin" />
+            )}
             Criar conta
           </Button>
         </CardFooter>

@@ -58,23 +58,24 @@ export const AuthContextProvider = ({ children }) => {
     init();
   }, []);
 
-  const signup = (data) => {
-    signUpMutation.mutate(data, {
-      onSuccess: (createdUser) => {
-        setTokens(createdUser.tokens);
-        setUser(createdUser);
-        toast.add({
-          type: 'success',
-          description: 'Conta criada com sucesso!',
-        });
-      },
-      onError: () => {
-        toast.add({
-          type: 'error',
-          description: 'Erro ao criar conta. Por favor, tente mais tarde.',
-        });
-      },
-    });
+  const signup = async (data) => {
+    try {
+      const createdUser = await signUpMutation.mutateAsync(data);
+      setUser(createdUser);
+      setTokens(createdUser.tokens);
+      toast.add({
+        type: 'success',
+        title: 'Conta criada com sucesso!',
+        description: 'Seja bem vindo.',
+      });
+    } catch (error) {
+      console.error(error);
+      toast.add({
+        type: 'error',
+        title: 'Erro ao criar conta!',
+        description: 'Por favor, tente mais tarde.',
+      });
+    }
   };
 
   const signin = async (data) => {
@@ -84,9 +85,15 @@ export const AuthContextProvider = ({ children }) => {
       setTokens(loggedUser.tokens);
       toast.add({
         type: 'success',
-        description: 'Logado com sucesso!',
+        title: 'Logado com sucesso!',
+        description: 'É bom vê-lo novamente.',
       });
     } catch (error) {
+      toast.add({
+        type: 'error',
+        title: 'Erro ao realizar o login!',
+        description: 'Por favor, verifique suas credenciais.',
+      });
       console.error(error);
     }
   };

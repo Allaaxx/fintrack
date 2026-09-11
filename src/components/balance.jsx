@@ -7,10 +7,9 @@ import {
 } from 'lucide-react';
 import { useSearchParams } from 'react-router';
 
+import BalanceItem from '@/components/balance-item';
 import { useAuthContext } from '@/contexts/auth';
 import { UserService } from '@/services';
-
-import BalanceItem from './balance-item';
 
 const Balance = () => {
   const [searchParams] = useSearchParams();

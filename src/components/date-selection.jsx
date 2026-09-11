@@ -3,9 +3,8 @@ import { addMonths, format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 
+import DatePickerWithRange from '@/components/ui/date-picker-with-range';
 import { useAuthContext } from '@/contexts/auth';
-
-import DatePickerWithRange from './ui/date-picker-with-range';
 
 const formatDateToQueryParam = (date) => format(date, 'yyyy-MM-dd');
 

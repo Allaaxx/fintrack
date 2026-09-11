@@ -1,11 +1,9 @@
 import { ChevronDownIcon, LogOutIcon } from 'lucide-react';
 
 import { LogoIcon } from '@/assets/images';
-import { useAuthContext } from '@/contexts/auth';
-
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Button } from './ui/button';
-import { Card, CardContent } from './ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +12,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
+import { useAuthContext } from '@/contexts/auth';
 const Header = () => {
   const { user, signout } = useAuthContext();
   return (

@@ -5,12 +5,12 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router';
 
-import { Toaster } from './components/ui/toast';
-import { AuthContextProvider } from './contexts/auth';
-import HomePage from './pages/home';
-import NotFoundPage from './pages/not-found';
-import SignInPage from './pages/signin';
-import SignUpPage from './pages/signup';
+import { Toaster } from '@/components/ui/toast';
+import { AuthContextProvider } from '@/contexts/auth';
+import HomePage from '@/pages/home';
+import NotFoundPage from '@/pages/not-found';
+import SignInPage from '@/pages/signin';
+import SignUpPage from '@/pages/signup';
 
 const queryClient = new QueryClient();
 

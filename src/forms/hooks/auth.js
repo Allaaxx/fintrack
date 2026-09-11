@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { signInFormSchema } from '@/forms/schemas/auth';
+import { signInFormSchema, signUpFormSchema } from '@/forms/schemas/auth';
 
 export const useSignInForm = () => {
   const form = useForm({
@@ -10,6 +10,23 @@ export const useSignInForm = () => {
     defaultValues: {
       email: '',
       password: '',
+    },
+  });
+
+  return { form };
+};
+
+export const useSignUpForm = () => {
+  const form = useForm({
+    resolver: zodResolver(signUpFormSchema),
+    mode: 'onSubmit',
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      passwordConfirmation: '',
+      terms: false,
     },
   });
 

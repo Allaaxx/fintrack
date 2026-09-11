@@ -61,7 +61,7 @@ const AddTransactionButton = () => {
             </Button>
           }
         ></DialogTrigger>
-        <DialogContent>
+        <DialogContent className="min-w-112.5">
           <DialogHeader>
             <DialogTitle>Adicionar Transação</DialogTitle>
             <DialogDescription>Insira as informações abaixo.</DialogDescription>

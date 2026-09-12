@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { useSignIn, useSignUp } from '@/api/hooks/auth';
-import { AuthService } from '@/api/services/index';
+import { AuthService } from '@/api/services/auth';
 import { toast } from '@/components/ui/toast';
 import {
   LOCAL_STORAGE_ACCESS_TOKEN_KEY,

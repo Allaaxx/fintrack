@@ -4,14 +4,13 @@ import { ArrowUpDown, Loader2Icon } from 'lucide-react';
 import { useSearchParams } from 'react-router';
 
 import { useGetTransactions } from '@/api/hooks/transaction';
+import DeleteTransactionButton from '@/components/delete-transaction-button';
+import EditTransactionButton from '@/components/edit-transaction-button';
+import TransactionTypeBadge from '@/components/transaction-type-badge';
+import { Button } from '@/components/ui/button';
+import { DataTable } from '@/components/ui/data-table';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { formatCurrency } from '@/helpers/currency';
-
-import DeleteTransactionButton from './delete-transaction-button';
-import EditTransactionButton from './edit-transaction-button';
-import TransactionTypeBadge from './transaction-type-badge';
-import { Button } from './ui/button';
-import { DataTable } from './ui/data-table';
-import { ScrollArea } from './ui/scroll-area';
 
 const columns = [
   {

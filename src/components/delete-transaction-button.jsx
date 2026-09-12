@@ -4,6 +4,9 @@ import { Loader2Icon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 
 import { useDeleteTransaction } from '@/api/hooks/transaction';
+import TransactionTypeBadge from '@/components/transaction-type-badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Dialog,
   DialogClose,
@@ -13,15 +16,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Field, FieldGroup } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from '@/components/ui/toast';
 import { useAuthContext } from '@/contexts/auth';
-
-import TransactionTypeBadge from './transaction-type-badge';
-import { Button } from './ui/button';
-import { Card, CardContent } from './ui/card';
-import { Field, FieldGroup } from './ui/field';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { toast } from './ui/toast';
 
 const DeleteTransactionButton = ({ transaction }) => {
   const { user } = useAuthContext();

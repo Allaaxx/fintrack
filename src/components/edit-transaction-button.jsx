@@ -27,9 +27,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { toast } from '@/components/ui/toast';
 import { useEditTransactionForm } from '@/forms/hooks/transaction';
-
-import { toast } from './ui/toast';
 const EditTransactionButton = ({ transaction }) => {
   const [sheetIsOpen, setSheetIsOpen] = useState(false);
   const { form, onSubmit } = useEditTransactionForm({

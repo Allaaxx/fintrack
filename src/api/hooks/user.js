@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { UserService } from '@/api/services';
+import { UserService } from '@/api/services/user';
 import { useAuthContext } from '@/contexts/auth';
 
 export const getUserBalanceQueryKey = ({ userId, from, to }) => {

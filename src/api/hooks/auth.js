@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { AuthService } from '../services';
+import { AuthService } from '@/api/services/auth';
 
 export const signupMutationKey = ['signup'];
 export const signinMutationKey = ['signin'];

@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { useAuthContext } from '@/contexts/auth';
 
 import TransactionTypeBadge from './transaction-type-badge';
 import { Button } from './ui/button';
@@ -23,12 +24,14 @@ import { Label } from './ui/label';
 import { toast } from './ui/toast';
 
 const DeleteTransactionButton = ({ transaction }) => {
+  const { user } = useAuthContext();
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
   const { mutateAsync: deleteTransaction, isPending } = useDeleteTransaction();
 
-  const isButtonDisabled = inputValue !== transaction.name || isPending;
+  const isButtonDisabled =
+    inputValue !== user.firstName + '/' + transaction.name || isPending;
 
   const handleDelete = () => {
     deleteTransaction(
@@ -104,7 +107,8 @@ const DeleteTransactionButton = ({ transaction }) => {
         <FieldGroup>
           <Field>
             <Label htmlFor="name" className="text-primary-red">
-              Para confirmar, digite "{transaction.name}" no campo abaixo
+              Para confirmar, digite "{user.firstName}/{transaction.name}" no
+              campo abaixo
             </Label>
             <Input
               id="name"

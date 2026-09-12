@@ -152,7 +152,7 @@ export function TransactionsTypeChart() {
     );
   }
   return (
-    <Card className="flex h-fit">
+    <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Transações</CardTitle>
         <CardDescription>
@@ -180,7 +180,7 @@ export function TransactionsTypeChart() {
       <CardContent className="flex-1 justify-between pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-62.5"
+          className="mx-auto aspect-square h-52 w-full max-w-52 sm:h-60 sm:max-w-60"
         >
           <PieChart>
             <ChartTooltip

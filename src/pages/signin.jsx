@@ -35,7 +35,7 @@ const SignInPage = () => {
   }
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center gap-3">
-      <Card className="w-full max-w-lg">
+      <Card className="w-2xs sm:w-full sm:max-w-lg">
         <CardHeader>
           <CardTitle>Entre na sua conta</CardTitle>
           <CardDescription>Insira seus dados abaixo.</CardDescription>

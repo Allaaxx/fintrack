@@ -36,7 +36,7 @@ const SignUpPage = () => {
   }
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center gap-3">
-      <Card className="w-full max-w-lg">
+      <Card className="w-2xs sm:w-full sm:max-w-lg">
         <CardHeader>
           <CardTitle>Criar uma conta</CardTitle>
           <CardDescription>
@@ -149,33 +149,40 @@ const SignUpPage = () => {
                 render={({ field, fieldState }) => (
                   <FieldGroup data-slot="checkbox-group">
                     <Field
-                      orientation="horizontal"
+                      orientation="vertical"
                       data-invalid={fieldState.invalid}
                     >
-                      <Checkbox
-                        id="terms"
-                        name={field.name}
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        onBlur={field.onBlur}
-                        ref={field.ref}
-                        aria-invalid={fieldState.invalid}
-                      />
-
-                      <div className="grid gap-1.5 leading-none">
+                      <div className="flex gap-1.5 leading-none">
+                        <Checkbox
+                          id="terms"
+                          name={field.name}
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          onBlur={field.onBlur}
+                          ref={field.ref}
+                          aria-invalid={fieldState.invalid}
+                        />
                         <FieldLabel
                           htmlFor="terms"
-                          className={`text-xs opacity-75 ${!fieldState.invalid && 'text-muted-foreground'}`}
+                          className={`text-xs opacity-75 ${!fieldState.invalid && 'text-muted-foreground '}`}
                         >
                           Ao clicar em "Criar conta", você aceita{' '}
                           <a
                             href="#"
-                            className={`underline ${!fieldState.invalid && 'text-white'}`}
+                            className={`underline ${!fieldState.invalid && 'hidden text-white sm:block'}`}
                           >
                             nosso termo de uso e política de privacidade.
                           </a>
                         </FieldLabel>
                       </div>
+                      <FieldLabel>
+                        <a
+                          href="#"
+                          className={`underline ${!fieldState.invalid && 'block text-white sm:hidden'}`}
+                        >
+                          nosso termo de uso e política de privacidade.
+                        </a>
+                      </FieldLabel>
                     </Field>
                   </FieldGroup>
                 )}

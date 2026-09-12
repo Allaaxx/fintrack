@@ -16,6 +16,7 @@ import { ScrollArea } from './ui/scroll-area';
 const columns = [
   {
     accessorKey: 'name',
+
     header: ({ column }) => {
       return (
         <Button
@@ -27,9 +28,21 @@ const columns = [
         </Button>
       );
     },
+
+    sortFn: (rowA, rowB, columnId) => {
+      const nameA = String(rowA.getValue(columnId) ?? '');
+      const nameB = String(rowB.getValue(columnId) ?? '');
+
+      return nameA.localeCompare(nameB, 'pt-BR', {
+        sensitivity: 'base',
+        numeric: true,
+      });
+    },
   },
+
   {
     accessorKey: 'type',
+
     header: ({ column }) => {
       return (
         <Button
@@ -41,12 +54,24 @@ const columns = [
         </Button>
       );
     },
+
+    sortFn: (rowA, rowB, columnId) => {
+      const typeA = String(rowA.getValue(columnId) ?? '');
+      const typeB = String(rowB.getValue(columnId) ?? '');
+
+      return typeA.localeCompare(typeB, 'pt-BR', {
+        sensitivity: 'base',
+      });
+    },
+
     cell: ({ row: { original: transaction } }) => {
       return <TransactionTypeBadge variant={transaction.type.toLowerCase()} />;
     },
   },
+
   {
     accessorKey: 'date',
+
     header: ({ column }) => {
       return (
         <Button
@@ -58,14 +83,25 @@ const columns = [
         </Button>
       );
     },
+
+    sortFn: (rowA, rowB, columnId) => {
+      const dateA = new Date(String(rowA.getValue(columnId) ?? '')).getTime();
+
+      const dateB = new Date(String(rowB.getValue(columnId) ?? '')).getTime();
+
+      return dateA - dateB;
+    },
+
     cell: ({ row: { original: transaction } }) => {
       return format(new Date(transaction.date), "dd 'de' MMMM 'de' yyyy", {
         locale: ptBR,
       });
     },
   },
+
   {
     accessorKey: 'amount',
+
     header: ({ column }) => {
       return (
         <Button
@@ -77,19 +113,30 @@ const columns = [
         </Button>
       );
     },
+
+    sortFn: (rowA, rowB, columnId) => {
+      const amountA = Number(rowA.getValue(columnId) ?? 0);
+      const amountB = Number(rowB.getValue(columnId) ?? 0);
+
+      return amountA - amountB;
+    },
+
     cell: ({ row: { original: transaction } }) => {
       return formatCurrency(transaction.amount);
     },
   },
+
   {
-    accessorKey: 'actions',
+    id: 'actions',
     header: 'Ações',
+    enableSorting: false,
+
     cell: ({ row: { original: transaction } }) => {
       return (
-        <>
+        <div className="flex items-center gap-2">
           <EditTransactionButton transaction={transaction} />
           <DeleteTransactionButton transaction={transaction} />
-        </>
+        </div>
       );
     },
   },
@@ -97,17 +144,63 @@ const columns = [
 
 const TransactionsTable = () => {
   const [searchParams] = useSearchParams();
+
   const from = searchParams.get('from');
   const to = searchParams.get('to');
-  const { data: transactions } = useGetTransactions({ from, to });
-  if (!transactions) return null;
+
+  const {
+    data: transactions,
+    isLoading,
+    isError,
+  } = useGetTransactions({
+    from,
+    to,
+  });
+
+  if (isLoading) {
+    return (
+      <section>
+        <h2 className="mb-4 text-2xl font-bold">Transações</h2>
+
+        <div className="flex h-90 items-center justify-center rounded-md border">
+          Carregando transações...
+        </div>
+      </section>
+    );
+  }
+
+  if (isError) {
+    return (
+      <section>
+        <h2 className="mb-4 text-2xl font-bold">Transações</h2>
+
+        <div className="text-destructive flex h-90 items-center justify-center rounded-md border">
+          Não foi possível carregar as transações.
+        </div>
+      </section>
+    );
+  }
+
+  if (!transactions?.length) {
+    return (
+      <section>
+        <h2 className="mb-4 text-2xl font-bold">Transações</h2>
+
+        <div className="flex h-90 items-center justify-center rounded-md border">
+          Nenhuma transação encontrada para este período.
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <>
-      <h2 className="text-2xl font-bold">Transações</h2>
-      <ScrollArea className="h-90 max-h-90 rounded-md border">
+    <section>
+      <h2 className="mb-4 text-2xl font-bold">Transações</h2>
+
+      <ScrollArea className="h-90 rounded-md border">
         <DataTable columns={columns} data={transactions} />
       </ScrollArea>
-    </>
+    </section>
   );
 };
 

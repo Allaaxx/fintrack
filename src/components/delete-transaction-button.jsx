@@ -60,7 +60,7 @@ const DeleteTransactionButton = ({ transaction }) => {
       open={deleteDialogIsOpen}
       onOpenChange={(open) => {
         setDeleteDialogIsOpen(open);
-        if (!open) setInputValue('');
+        setInputValue('');
       }}
     >
       <DialogTrigger

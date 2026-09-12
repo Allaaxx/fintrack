@@ -34,7 +34,7 @@ const Header = () => {
                       {user.lastName[0]}
                     </AvatarFallback>
                   </Avatar>
-                  <p className="text-sm">
+                  <p className="hidden sm:block sm:text-sm">
                     {user.firstName} {user.lastName}
                   </p>
                   <ChevronDownIcon />

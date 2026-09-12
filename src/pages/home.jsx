@@ -17,15 +17,15 @@ const HomePage = () => {
   return (
     <>
       <Header />
-      <div className="space-y-6 p-8 py-4">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 p-4 py-2 sm:space-y-6 sm:p-8 sm:py-4">
+        <div className="flex flex-col justify-between gap-3 sm:flex-row">
           <h2 className="text-2xl font-bold">Dashboard</h2>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <DateSelection />
             <AddTransactionButton />
           </div>
         </div>
-        <div className="grid grid-cols-[2fr_1fr] gap-8">
+        <div className="grid grid-cols-1 grid-rows-1 gap-8 sm:grid-cols-[2fr_1fr]">
           <Balance />
           <TransactionsTypeChart />
         </div>

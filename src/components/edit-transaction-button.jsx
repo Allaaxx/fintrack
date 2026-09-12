@@ -59,13 +59,13 @@ const EditTransactionButton = ({ transaction }) => {
         }
       />
 
-      <SheetContent className="min-w-112.5">
+      <SheetContent className="sm:min-w-112.5">
         <SheetHeader>
           <SheetTitle>Editar Transação</SheetTitle>
         </SheetHeader>
         <form
           id="editTransaction"
-          className="space-y-8 px-4"
+          className="space-y-4 px-2 sm:space-y-8 sm:px-4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <FieldGroup>
@@ -141,7 +141,7 @@ const EditTransactionButton = ({ transaction }) => {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="type">Tipo</FieldLabel>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 gap-1 sm:grid-cols-3">
                     <Button
                       variant={
                         field.value === 'EARNING' ? 'secondary' : 'outline'

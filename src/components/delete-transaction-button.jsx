@@ -67,7 +67,7 @@ const DeleteTransactionButton = ({ transaction }) => {
           </Button>
         }
       />
-      <DialogContent className="sm:max-w-sm">
+      <DialogContent className="sm:min-w-112.5">
         <DialogHeader>
           <DialogTitle>Deletar "{transaction.name}"</DialogTitle>
         </DialogHeader>

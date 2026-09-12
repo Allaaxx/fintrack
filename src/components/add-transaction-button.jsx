@@ -61,7 +61,7 @@ const AddTransactionButton = () => {
             </Button>
           }
         ></DialogTrigger>
-        <DialogContent className="min-w-112.5">
+        <DialogContent className="sm:min-w-112.5">
           <DialogHeader>
             <DialogTitle>Adicionar Transação</DialogTitle>
             <DialogDescription>Insira as informações abaixo.</DialogDescription>
@@ -144,7 +144,7 @@ const AddTransactionButton = () => {
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor="type">Tipo</FieldLabel>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                       <Button
                         variant={
                           field.value === 'EARNING' ? 'secondary' : 'outline'
@@ -188,7 +188,7 @@ const AddTransactionButton = () => {
                   type="reset"
                   variant="secondary"
                   disabled={form.formState.isSubmitting}
-                  className="w-1/2"
+                  className="w-full sm:w-1/2"
                   onClick={() => form.reset()}
                 >
                   Cancelar
@@ -199,7 +199,7 @@ const AddTransactionButton = () => {
               type="submit"
               form="addTransaction"
               disabled={form.formState.isSubmitting}
-              className="w-1/2"
+              className="w-full sm:w-1/2"
             >
               {form.formState.isSubmitting && (
                 <Loader2Icon className="animate-spin" />

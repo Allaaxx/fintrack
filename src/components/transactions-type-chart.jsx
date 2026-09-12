@@ -152,7 +152,7 @@ export function TransactionsTypeChart() {
     );
   }
   return (
-    <Card className="flex">
+    <Card className="flex h-fit">
       <CardHeader className="items-center pb-0">
         <CardTitle>Transações</CardTitle>
         <CardDescription>
@@ -177,7 +177,7 @@ export function TransactionsTypeChart() {
                 : 'Todos os períodos'}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-1 flex-row justify-between pb-0">
+      <CardContent className="flex-1 justify-between pb-0">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-62.5"

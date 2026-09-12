@@ -126,7 +126,7 @@ export function TransactionsTypeChart() {
     return calculateChartData(transactions);
   }, [transactions]);
 
-  if (!transactions) {
+  if (!transactions?.length) {
     return (
       <Card>
         <CardHeader>

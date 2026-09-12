@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown, Loader2Icon } from 'lucide-react';
 import { useSearchParams } from 'react-router';
 
 import { useGetTransactions } from '@/api/hooks/transaction';
@@ -163,7 +163,7 @@ const TransactionsTable = () => {
         <h2 className="mb-4 text-2xl font-bold">Transações</h2>
 
         <div className="flex h-90 items-center justify-center rounded-md border">
-          Carregando transações...
+          <Loader2Icon className="animate-spin" />
         </div>
       </section>
     );
@@ -174,8 +174,10 @@ const TransactionsTable = () => {
       <section>
         <h2 className="mb-4 text-2xl font-bold">Transações</h2>
 
-        <div className="text-destructive flex h-90 items-center justify-center rounded-md border">
-          Não foi possível carregar as transações.
+        <div className="text-destructive r flex h-90 items-center justify-center rounded-md border">
+          <p className="text-center">
+            Não foi possível carregar as transações.
+          </p>
         </div>
       </section>
     );
@@ -187,7 +189,9 @@ const TransactionsTable = () => {
         <h2 className="mb-4 text-2xl font-bold">Transações</h2>
 
         <div className="flex h-90 items-center justify-center rounded-md border">
-          Nenhuma transação encontrada para este período.
+          <p className="text-center">
+            Nenhuma transação encontrada para este período.
+          </p>
         </div>
       </section>
     );

@@ -69,6 +69,14 @@ const renderSector = (props) => {
     />
   );
 };
+const emptyChartData = [
+  {
+    type: 'EMPTY',
+    label: 'Sem transações',
+    quantity: 1,
+    fill: 'hsl(var(--muted))',
+  },
+];
 
 const calculateChartData = (transactions = []) => {
   const groupedTransactions = {
@@ -128,12 +136,65 @@ export function TransactionsTypeChart() {
 
   if (!transactions?.length) {
     return (
-      <Card>
-        <CardHeader>
+      <Card className="flex flex-col">
+        <CardHeader className="items-center pb-0">
           <CardTitle>Transações</CardTitle>
+
+          <CardDescription>
+            Nenhuma transação encontrada neste período
+          </CardDescription>
         </CardHeader>
-        <CardContent className="flex h-full w-full items-center justify-center">
-          Nenhuma transação encontrada.
+
+        <CardContent className="flex-1 pb-0">
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto aspect-square h-52 w-full max-w-52 sm:h-60 sm:max-w-60"
+          >
+            <PieChart>
+              <Pie
+                data={emptyChartData}
+                dataKey="quantity"
+                nameKey="label"
+                innerRadius={60}
+                outerRadius={80}
+                stroke="none"
+                isAnimationActive={false}
+              >
+                <Label
+                  content={({ viewBox }) => {
+                    if (!viewBox || !('cx' in viewBox) || !('cy' in viewBox)) {
+                      return null;
+                    }
+
+                    return (
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) - 8}
+                          className="fill-foreground text-sm font-semibold"
+                        >
+                          Sem transações
+                        </tspan>
+
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) + 16}
+                          className="fill-muted-foreground text-xs"
+                        >
+                          0 registros
+                        </tspan>
+                      </text>
+                    );
+                  }}
+                />
+              </Pie>
+            </PieChart>
+          </ChartContainer>
         </CardContent>
       </Card>
     );
